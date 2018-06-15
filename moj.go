@@ -12,7 +12,7 @@ import (
 )
 
 var (
-	cluster      = "cassandra"
+	cluster      = "cassandra" //if you would like to test it locally change it ot localhost or ip of the casssandra server
 	keyspacename = "projekt1"
 	tablename    = "test"
 	filename     = "index.html"
@@ -21,7 +21,6 @@ var (
 func createkyespace() {
 	c := gocql.NewCluster(cluster)
 	c.Keyspace = "system"
-	//c.Timeout = 1 * time.Second
 	session, err := c.CreateSession()
 	if err != nil {
 		panic(err)
@@ -41,7 +40,6 @@ func createkyespace() {
 func createtable() {
 	c := gocql.NewCluster(cluster)
 	c.Keyspace = keyspacename
-	//c.Timeout = 30 * time.Second
 	session, err := c.CreateSession()
 	if err != nil {
 		panic(err)

@@ -1,6 +1,9 @@
 FROM golang
 WORKDIR /go
 COPY moj.go /go
-COPY run.sh /go
+RUN apt-get update && apt-get install -y nginx
+COPY default /etc/nginx/sites-enabled
+COPY run.sh /go/run.sh
+RUN chmod +x /go/run.sh
 RUN go get github.com/gocql/gocql
-CMD [ "go", "run", "/go/moj.go" ]
+CMD [ "/go/run.sh" ]
