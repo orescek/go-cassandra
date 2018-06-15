@@ -30,7 +30,7 @@ func createkyespace() {
 	table := fmt.Sprintf(`CREATE KEYSPACE %s WITH replication = { 'class' : 'SimpleStrategy', 'replication_factor' : 1}`, keyspacename)
 	if err := session.Query(table).RetryPolicy(nil).Exec(); err == nil {
 		//log.Printf("error creating table table=%q err=%v\n", table, err)
-		os.Remove(filename)
+		os.Remove(filename) //just to be shure
 	} else {
 		log.Printf("Already created keyspace")
 	}
@@ -104,7 +104,6 @@ func mojprojekt(w http.ResponseWriter, r *http.Request) {
 
 	iter := session.Query(`SELECT cas FROM test`).Iter()
 	for iter.Scan(&cas) {
-		//fmt.Println("casovi:", cas)
 		write_to_file("<tr><td>" + cas + "</td></tr>")
 	}
 	if err := iter.Close(); err != nil {
@@ -116,14 +115,12 @@ func mojprojekt(w http.ResponseWriter, r *http.Request) {
 					</html>`)
 	file.Close()
 
-	b, err := ioutil.ReadFile(filename) // just pass the file name
+	fullfile, err := ioutil.ReadFile(filename)
 	if err != nil {
 		fmt.Print(err)
 	}
-	str := string(b) // convert content to a 'string'
 
-	//fmt.Println(str) // print the content as a 'string'
-	fmt.Fprintf(w, str)
+	fmt.Fprintf(w, string(fullfile))
 
 }
 
