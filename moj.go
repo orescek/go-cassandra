@@ -2,7 +2,9 @@ package main
 
 import (
 	"fmt"
+	"io/ioutil"
 	"log"
+	"net/http"
 	"os"
 	"time"
 
@@ -10,7 +12,7 @@ import (
 )
 
 var (
-	cluster      = "localhost"
+	cluster      = "cassandra"
 	keyspacename = "projekt1"
 	tablename    = "test"
 	filename     = "index.html"
@@ -65,7 +67,7 @@ func write_to_file(str string) {
 	}
 }
 
-func main() {
+func mojprojekt(w http.ResponseWriter, r *http.Request) {
 
 	createkyespace()
 	createtable()
@@ -102,4 +104,19 @@ func main() {
 
 	write_to_file("</table>")
 	file.Close()
+
+	b, err := ioutil.ReadFile(filename) // just pass the file name
+	if err != nil {
+		fmt.Print(err)
+	}
+	str := string(b) // convert content to a 'string'
+
+	//fmt.Println(str) // print the content as a 'string'
+	fmt.Fprintf(w, str)
+
+}
+
+func main() {
+	http.HandleFunc("/test", mojprojekt)
+	http.ListenAndServe(":8898", nil)
 }
