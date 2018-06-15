@@ -89,7 +89,18 @@ func mojprojekt(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	write_to_file("<table>")
+	write_to_file(`<!DOCTYPE html>
+		<html>
+		<head>
+		<style>
+		table, th, td {
+			border: 1px solid black;
+			border-collapse: collapse;
+		}
+		</style>
+		</head>
+		<body>
+		<table>`)
 
 	iter := session.Query(`SELECT cas FROM test`).Iter()
 	for iter.Scan(&cas) {
@@ -100,7 +111,9 @@ func mojprojekt(w http.ResponseWriter, r *http.Request) {
 		log.Fatal(err)
 	}
 
-	write_to_file("</table>")
+	write_to_file(`</table>
+					</body>
+					</html>`)
 	file.Close()
 
 	b, err := ioutil.ReadFile(filename) // just pass the file name
