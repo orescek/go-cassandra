@@ -21,7 +21,9 @@ Also installs nginx and does proxy pass to go lang app
 # Run and test Testing 
 
 Run it with docker compose(you sould be in folder where you checkout the code):
+```bash 
 docker-compose up
+```
 
 go to your web browser and open http://0.0.0.0:8888
 
